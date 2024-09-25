@@ -82,52 +82,53 @@ int suma(void *a, void *b) {
 
 
 void mostrar(const void *dato) {
-    printf("%d\n", *(char*) dato);
+    printf("%d\n", *(int*) dato);
 }
 
 int mostrarPila(t_pila *pila, size_t tam, Mostrar mostrar) {
     void *buffer = malloc(tam);
     if(!buffer) return 0;
     while(!esPilaVacia(pila)) {
-        desapilar(pila, buffer, sizeof(char));
+        verTope(pila, buffer, tam);
         mostrar(buffer);
+        desapilar(pila, buffer, sizeof(int));
     }
     free(buffer);
     return 1;
 }
 
 int sumaPilas(t_pila *pila1, t_pila *pila2, t_pila *pilaResult, Suma sum) {
-    void *num1 = malloc(sizeof(char));
+    void *num1 = malloc(sizeof(int));
     if(!num1) return 0;
-    void *num2 = malloc(sizeof(char));
+    void *num2 = malloc(sizeof(int));
     if(!num2) {
         free(num1);
         return 0;
     }
-    char sobrante = '1';
-    char aux;
+    int sobrante = 1;
+    int aux;
 
     while(!esPilaVacia(pila1) && !esPilaVacia(pila2)) {
-        desapilar(pila1, num1, sizeof(char));
-        desapilar(pila2, num2, sizeof(char));
+        desapilar(pila1, num1, sizeof(int));
+        desapilar(pila2, num2, sizeof(int));
         if(suma(num1, num2) > 9) {
-            apilar(pilaResult, &sobrante, sizeof(char));
-            aux = (char) suma(num1, num2) % 10;
-            apilar(pilaResult, &aux, sizeof(char));
+            apilar(pilaResult, &sobrante, sizeof(int));
+            aux = suma(num1, num2) % 10;
+            apilar(pilaResult, &aux, sizeof(int));
         } else {
-           aux = (char) suma(num1, num2);
-           apilar(pilaResult, &aux, sizeof(char));
+           aux =  suma(num1, num2);
+           apilar(pilaResult, &aux, sizeof(int));
         }
     }
 
     while(!esPilaVacia(pila1)) {
-        desapilar(pila1, num1, sizeof(char));
-        apilar(pilaResult, num1, sizeof(char));
+        desapilar(pila1, num1, sizeof(int));
+        apilar(pilaResult, num1, sizeof(int));
     }
 
     while(!esPilaVacia(pila1)) {
-        desapilar(pila2, num2, sizeof(char));
-        apilar(pilaResult, num2, sizeof(char));
+        desapilar(pila2, num2, sizeof(int));
+        apilar(pilaResult, num2, sizeof(int));
     }
 
     free(num1);
@@ -147,8 +148,8 @@ void ejercicio_2_7() {
 
 *********/
 
-    char vecPila1[] = {"2316"};
-    char vecPila2[] = {"7315"};
+    int vecPila1[] = {6, 1, 3, 2, 7};
+    int vecPila2[] = {5, 1, 3, 7};
     t_pila pila1;
     t_pila pila2;
     t_pila pilaResult;
@@ -166,7 +167,7 @@ void ejercicio_2_7() {
     };
 
     sumaPilas(&pila1, &pila2, &pilaResult, suma);
-    mostrarPila(&pilaResult, sizeof(char), mostrar);
+    mostrarPila(&pilaResult, sizeof(int), mostrar);
 
     vaciarPila(&pila1);
     vaciarPila(&pila2);
